@@ -1,58 +1,54 @@
 package com.example.class3demo2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
-    StudentsListFragment frag1;
-    BlueFragment frag2;
-    BlueFragment frag3;
-    StudentsListFragment frag4;
-    Fragment inDisplay;
+    NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        frag1 = new StudentsListFragment();
-        frag2 = BlueFragment.newInstance("2");
-        frag3 = BlueFragment.newInstance("3");
-        frag4 = new StudentsListFragment();
+        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.main_navhost);
+        navController = navHostFragment.getNavController();
+        NavigationUI.setupActionBarWithNavController(this,navController);
 
-        Button btn1 = findViewById(R.id.main_btn_1);
-        Button btn2 = findViewById(R.id.main_btn_2);
-        Button btn3 = findViewById(R.id.main_btn_3);
-        Button btn4 = findViewById(R.id.main_btn_4);
+        BottomNavigationView navView = findViewById(R.id.main_bottomNavigationView);
+        NavigationUI.setupWithNavController(navView,navController);
 
-        btn1.setOnClickListener((view)->{
-            displayFragment(frag1);
-        });
-        btn2.setOnClickListener((view)->{
-            displayFragment(frag2);
-        });
-        btn3.setOnClickListener((view)->{
-            displayFragment(frag3);
-        });
-        btn4.setOnClickListener((view)->{
-            displayFragment(frag4);
-        });
-        displayFragment(frag1);
     }
 
-    private void displayFragment(Fragment frag) {
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction tran = manager.beginTransaction();
-        tran.add(R.id.main_frag_container, frag);
-        if (inDisplay != null) tran.remove(inDisplay);
-        tran.addToBackStack("TAG");
-        tran.commit();
-        inDisplay = frag;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            navController.popBackStack();
+        }else{
+            return NavigationUI.onNavDestinationSelected(item,navController);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

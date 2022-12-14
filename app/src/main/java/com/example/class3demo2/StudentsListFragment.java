@@ -2,7 +2,10 @@ package com.example.class3demo2;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,8 +38,15 @@ public class StudentsListFragment extends Fragment {
             @Override
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
+                Student st = data.get(pos);
+                StudentsListFragmentDirections.ActionStudentsListFragmentToBlueFragment action = StudentsListFragmentDirections.actionStudentsListFragmentToBlueFragment(st.name);
+                Navigation.findNavController(view).navigate(action);
             }
         });
+
+        View addButton = view.findViewById(R.id.studentlistfrag_add_btn);
+        NavDirections action = StudentsListFragmentDirections.actionGlobalAddStudentFragment();
+        addButton.setOnClickListener(Navigation.createNavigateOnClickListener(action));
         return view;
     }
 }
