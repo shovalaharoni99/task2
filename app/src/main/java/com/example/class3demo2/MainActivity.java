@@ -36,17 +36,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    int fragmentMenuId = 0;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
+        if (fragmentMenuId != 0){
+            menu.removeItem(fragmentMenuId);
+        }
+        fragmentMenuId = 0;
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         if (item.getItemId() == android.R.id.home){
             navController.popBackStack();
         }else{
+            fragmentMenuId = item.getItemId();
             return NavigationUI.onNavDestinationSelected(item,navController);
         }
         return super.onOptionsItemSelected(item);
