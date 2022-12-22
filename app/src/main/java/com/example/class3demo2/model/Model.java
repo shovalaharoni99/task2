@@ -10,8 +10,8 @@ public class Model {
         return _instance;
     }
     private Model(){
-        for(int i=0;i<20;i++){
-            addStudent(new Student("name " + i,""+i,"",false));
+        for(int i=0;i<8;i++){
+            addStudent(new Student("name " + i,""+i,"",false, "number","address" ));
         }
     }
 
@@ -20,9 +20,21 @@ public class Model {
         return data;
     }
 
+    public Student getStudent(int pos){
+        return data.get(pos);
+    }
+
     public void addStudent(Student st){
         data.add(st);
     }
+
+    public void deleteStudent(int pos){
+        data.remove(pos);
+    }
+    public void addStudentInPos(Student st, int pos){
+        data.add(pos,st);
+    }
+
 
 
 }
